@@ -1,0 +1,28 @@
+# Reporting & Excel
+pandas==2.3.3
+numpy==2.0.2
+openpyxl==3.1.5
+XlsxWriter==1.1.2
+xlrd==1.2.0
+py3o.template==0.10.0
+py3o.formats==0.3
+
+# Hardware & Integration (Pabrik/Tambang)
+pyzk==0.9
+zk==0.9.4
+pyserial==3.5b0
+pyusb==1.0.2
+
+# Cloud & API
+boto3==1.40.64
+dropbox==12.0.2
+google-auth==2.47.0
+nextcloud-api-wrapper==0.2.3
+
+# Utilities
+num2words==0.5.9
+pyfcm==2.1.0
+qrcode==6.1
+zeep==4.0.0
+bcrypt==5.0.0
+cryptography==46.0.3
