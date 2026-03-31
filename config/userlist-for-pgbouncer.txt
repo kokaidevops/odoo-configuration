@@ -1,0 +1,2 @@
+"db_user_odoo" "password_user"
+"postgres" "password_postgres"
