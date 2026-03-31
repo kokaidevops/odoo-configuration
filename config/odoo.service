@@ -1,0 +1,17 @@
+[Unit]
+Description=Kokai Odoo
+Requires=postgresql.service
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+SyslogIdentifier=kokai
+PermissionsStartOnly=true
+User=kokai
+Group=kokai
+ExecStart=/opt/kokai/kokai-venv/bin/python3 /opt/kokai/kokai/odoo-bin -c /etc/kokai.conf
+StandardOutput=journal+console
+StandardError=journal+console
+
+[Install]
+WantedBy=multi-user.target
