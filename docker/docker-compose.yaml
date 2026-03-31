@@ -1,0 +1,39 @@
+version: '3'
+services:
+  db:
+    image: postgres:14.15
+    volumes:
+      - db-data:/var/lib/postgresql/data/pgdata
+    ports:
+      - "5073:5432"
+    environment:
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - POSTGRES_DB=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  web:
+    image: odoo:16.0
+    user: root
+    # Menambahkan flag -d agar Odoo tahu host DB-nya adalah service 'db'
+    entrypoint: >
+      sh -c "pip install --no-cache-dir setuptools && /entrypoint.sh odoo -d postgres"
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    depends_on:
+      - db
+    ports:
+      - "8093:8069"
+      - "8073:8072"
+    volumes:
+      - web-data:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./custom-addons:/mnt/custom-addons
+      - ./enterprise-addons:/mnt/enterprise-addons
+      - ./extra-addons:/mnt/extra-addons
+
+volumes:
+  db-data:
+  web-data:
