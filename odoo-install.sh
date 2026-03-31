@@ -61,7 +61,7 @@ git clone https://www.github.com/odoo/odoo --depth 1 --branch 16.0 $USER
 # clone custom addons
 mkdir $USER/$USER-addons
 cd $USER/$USER-addons
-
+git clone repo-custom-addons
 cd ../..
 
 # create venv
