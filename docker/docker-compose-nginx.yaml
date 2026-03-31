@@ -1,0 +1,54 @@
+version: '3.5'
+
+services:
+  # Service Nginx sebagai gerbang utama
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8093:80"   # Akses Web Odoo lewat port 8093
+      # - "8073:8072" # Akses Websocket lewat port 8073 (opsional jika pakai Nginx)
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web
+
+  web:
+    build: .
+    depends_on:
+      - db
+    # ports:
+      # - "8093:8069"
+      # - "8073:8072" # Port untuk longpolling/chat
+    # Port tidak perlu diexpose ke host (Ubuntu) karena sudah lewat Nginx
+    # Tapi jika ingin akses langsung tanpa nginx, biarkan 8069 tetap ada
+    expose:
+      - "8069"
+      - "8072"
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./custom-addons:/mnt/custom-addons
+      - ./enterprise-addons:/mnt/enterprise-addons
+      - ./extra-addons:/mnt/extra-addons
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    # Command untuk development (ditambah --dev=all agar auto-reload saat ganti python code)
+    command: odoo --dev=all -c /etc/odoo/odoo.conf
+
+  db:
+    image: postgres:15
+    ports:
+      - "5073:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data/pgdata
+
+volumes:
+  odoo-web-data:
+  odoo-db-data:
