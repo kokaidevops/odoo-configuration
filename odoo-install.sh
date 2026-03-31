@@ -3,6 +3,7 @@
 # VARIABLE
 USER="kokai"
 PASSWORD="password"
+URL="url.com"
 
 
 # ===============================================================================
@@ -75,6 +76,7 @@ pip install --upgrade pip setuptools wheel
 pip install "Cython<3.0.0"
 pip install "gevent==22.10.2"
 pip install requirements/base_package.txt
+pip install cryptography==38.0.4 pyOpenSSL==22.1.0
 #or pip install -r $USER/requirements.txt # maybe this command will error because version of gevent, recommended: delete line of gevent package
 exit
 
@@ -85,10 +87,14 @@ sudo cp config/odoo.conf /etc/$USER.conf # don't forget to adjust config
 # service config
 sudo cp config/odoo.service /etc/systemd/system/$USER.service
 # nginx config
-sudo cp config/nginx.conf /etc/nginx/sites-available/$USER
-sudo ln -s /etc/nginx/sites-available/$USER /etc/nginx/sites-enabled/$USER
+sudo cp config/nginx.conf /etc/nginx/sites-available/$URL
+sudo ln -s /etc/nginx/sites-available/$URL /etc/nginx/sites-enabled/$URL
 sudo nginx -t
 sudo systemctl restart nginx
 
+# if report_py3o is used, run 
+# apt-get --no-install-recommends install libreoffice
+# and set in odoo.conf
+# [report_py3o]
+# root_tmpl_path=/odoo/templates/py3o
 
-sudo systemctl daemon-reload
